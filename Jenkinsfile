@@ -20,6 +20,10 @@ pipeline {
                 '''
             }
         }
+        stage('Test stage')
+        {
+
+        }
     }
 }
 
