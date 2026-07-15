@@ -25,6 +25,7 @@ pipeline {
                 sh '''
                 echo 'Testing stage'
                 test -f build/index.html
+                echo $?
                 '''
             }
         }
