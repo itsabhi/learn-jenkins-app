@@ -16,8 +16,6 @@ pipeline {
                 ls -la
                 node --version
                 npm --version
-                npm cache clean --force
-                npm install -g npm@latest
                 npm ci
                 npm run build
                 ls -la
@@ -65,7 +63,6 @@ pipeline {
     }
 
     post {
-        // this will print junit test results in jenkins
         always {
             junit testResults: 'test-results/junit.xml', allowEmptyResults: true
         }
