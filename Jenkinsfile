@@ -7,7 +7,6 @@ pipeline {
                 docker {
                     image 'node:18-alpine'
                     reuseNode true
-                    // Added writable npm cache to avoid the "Exit handler never called" npm ci crash
                     args '-u 1000:1000 --ipc=host --env npm_config_cache=/tmp/.npm'
                 }
             }
@@ -16,8 +15,8 @@ pipeline {
                 ls -la
                 node --version
                 npm --version
-                # Clears any corrupt/root-owned node_modules from previous failures
-                rm -rf node_modules package-lock.json 
+                # ONLY delete node_modules, keep package-lock.json intact
+                rm -rf node_modules 
                 npm ci
                 npm run build
                 ls -la
