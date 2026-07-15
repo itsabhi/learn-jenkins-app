@@ -2,9 +2,13 @@ pipeline {
     agent any
 
     stages {
-        /*
-        
-        */
+ stage('Pre-Clean Workspace') {
+            // No docker agent here; uses the host agent's native user to safely 
+            // wipe the workspace without needing sudo or root containers.
+            steps {
+                deleteDir() 
+            }
+        }
         stage('Build') {
             agent{
                 docker{
