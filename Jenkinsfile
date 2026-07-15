@@ -3,32 +3,39 @@ pipeline {
 
     stages {
         stage('Build') {
-            agent{
-                docker{
+            agent {
+                docker {
                     image 'node:18-alpine'
                     reuseNode true
+                    args '-e HOME=/tmp'
                 }
             }
             steps {
                 sh '''
+                set -e
                 ls -la
                 node --version
-                npm  --version
+                npm --version
+                npm cache clean --force
+                npm install -g npm@latest
                 npm ci
                 npm run build
                 ls -la
                 '''
             }
         }
-        stage('Test'){
-                        agent{
-                docker{
+
+        stage('Test') {
+            agent {
+                docker {
                     image 'node:18-alpine'
                     reuseNode true
+                    args '-e HOME=/tmp'
                 }
             }
-            steps{
+            steps {
                 sh '''
+                set -e
                 echo 'Testing stage'
                 test -f build/index.html
                 echo $?
@@ -36,30 +43,31 @@ pipeline {
                 '''
             }
         }
-                stage('E2E'){
-                        agent{
-                docker{
+
+        stage('E2E') {
+            agent {
+                docker {
                     image 'mcr.microsoft.com/playwright:v1.61.0-noble'
                     reuseNode true
                     args '-u 1000:1000 --ipc=host'
                 }
             }
-            steps{
+            steps {
                 sh '''
-                    npm install serve
-                    node_modules/.bin/serve -s build &
-                    sleep 15
-                    npx playwright test
+                set -e
+                npm install serve
+                node_modules/.bin/serve -s build &
+                sleep 15
+                npx playwright test
                 '''
             }
         }
     }
-    post
-    {
-        //this will print junit test results in jenkins
-        always{
-            junit 'test-results/junit.xml'
+
+    post {
+        // this will print junit test results in jenkins
+        always {
+            junit testResults: 'test-results/junit.xml', allowEmptyResults: true
         }
     }
 }
-
