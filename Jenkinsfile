@@ -7,6 +7,7 @@ pipeline {
                 docker{
                     image 'node:18-alpine'
                     reuseNode true
+                    args '-u 1000:1000 --ipc=host'
                 }
             }
             steps {
@@ -25,6 +26,7 @@ pipeline {
                 docker{
                     image 'node:18-alpine'
                     reuseNode true
+                    args '-u 1000:1000 --ipc=host'
                 }
             }
             steps{
@@ -41,6 +43,7 @@ pipeline {
                 docker{
                     image 'mcr.microsoft.com/playwright:v1.61.0-noble'
                     reuseNode true
+                    args '-u 1000:1000 --ipc=host'
                 }
             }
             steps{
