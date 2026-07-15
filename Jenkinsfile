@@ -7,12 +7,10 @@ pipeline {
                 docker {
                     image 'node:18-alpine'
                     reuseNode true
-                
                 }
             }
             steps {
                 sh '''
-                set -e
                 ls -la
                 node --version
                 npm --version
@@ -28,12 +26,10 @@ pipeline {
                 docker {
                     image 'node:18-alpine'
                     reuseNode true
-                    args '-e HOME=/tmp'
                 }
             }
             steps {
                 sh '''
-                set -e
                 echo 'Testing stage'
                 test -f build/index.html
                 echo $?
@@ -62,9 +58,9 @@ pipeline {
         // }
     }
 
-    post {
-        always {
-            junit testResults: 'test-results/junit.xml', allowEmptyResults: true
-        }
-    }
+    // post {
+    //     always {
+    //         junit testResults: 'test-results/junit.xml', allowEmptyResults: true
+    //     }
+    // }
 }
