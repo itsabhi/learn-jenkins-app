@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        // Clear DOCKER_HOST so Docker falls back to /var/run/docker.sock
+        DOCKER_HOST = ''
+        DOCKER_TLS_VERIFY = ''
+    }
     stages {
         stage('Build') {
             agent {
