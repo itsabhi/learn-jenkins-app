@@ -34,10 +34,10 @@ pipeline {
                 '''
             } 
         }
-                stage('E2E'){
+        stage('E2E'){
               agent {
                 docker {
-                    docker pull mcr.microsoft.com/playwright:v1.62.0-noble
+                    pull mcr.microsoft.com/playwright:v1.62.0-noble
                     reuseNode true
                 }
             }
