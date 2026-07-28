@@ -20,41 +20,39 @@ pipeline {
                 '''
             }
         }
-        stage('Test') {
-            agent {
+        stage('Test'){
+              agent {
                 docker {
                     image 'node:18-alpine'
                     reuseNode true
                 }
             }
-            steps {
-                sh '''
-                    test -f build/index.html
-                    npm test
+            steps{
+                sh'''
+                test -f build/index.html
+                npm test
                 '''
             } 
         }
-        stage('E2E') {
-            agent {
+        stage('E2E'){
+              agent {
                 docker {
                     image 'mcr.microsoft.com/playwright:v1.62.0-noble'
                     reuseNode true
                 }
             }
-            steps {
-                sh '''
-                    # Start server in background so script can continue
-                    npx serve -s build &
-                    
-                    # Run Playwright tests
-                    npx playwright test
+            steps{
+                sh'''
+                npm install -g serve
+                serve -s build
+                npx playwright test
                 '''
             } 
         }
     }
-    post {
-        always {
-            junit 'test-results/junit.xml'
+    post{
+        always{
+            junit "test-results/junit.xml "
         }
     }
-}
+}   
